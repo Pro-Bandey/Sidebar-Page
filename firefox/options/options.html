@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Options - Sidebar Page</title>
+  <link type="text/css" rel="stylesheet" href="options.css">
+</head>
+
+<body>
+  <div class="md-options-wrapper">
+    <header class="md-header">
+      <div class="logo" role="img" aria-label="Sidebar Page Logo"></div>
+      <h1 class="md-title">Sidebar Page Settings</h1>
+      <p class="md-subtitle">Customize your sidebar experience</p>
+    </header>
+
+    <main class="md-container">
+      <section class="md-card">
+        <h2 class="md-card-title">General Configuration</h2>
+        <div class="md-setting-row">
+          <div class="md-setting-info">
+            <span class="md-setting-label">Website Address</span>
+            <span class="md-setting-description">Set your desired site or landing page URL.</span>
+          </div>
+          <div class="md-setting-control">
+            <input data-pref="sidebar.url" type="url" class="md-text-input" value="google.com" placeholder="e.g., https://www.google.com/">
+          </div>
+        </div>
+
+        <div class="md-setting-row">
+          <div class="md-setting-info">
+            <span class="md-setting-label">Mobile/Desktop View</span>
+            <span class="md-setting-description">Select user-agent behavior (takes effect on reload).</span>
+          </div>
+          <div class="md-setting-control">
+            <select data-pref="sidebar.mobile" class="md-select-input">
+              <option>Mobile: Apple iOS</option>
+              <option>Mobile: Google Android</option>
+              <option>Mobile: Windows Phone</option>
+              <option>Mobile: Firefox OS</option>
+              <option>Mobile: Samsung Tizen</option>
+              <option>Desktop: Default View</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="md-card size">
+        <h2 class="md-card-title">Sizing Defaults</h2>
+        <div class="md-setting-row">
+          <div class="md-setting-info">
+            <span class="md-setting-label">Sidebar Width</span>
+            <span class="md-setting-description">Default width constraint in pixels (min 200px).</span>
+          </div>
+          <div class="md-setting-control">
+            <input data-pref="sidebar.width" type="number" min="200" class="md-number-input">
+          </div>
+        </div>
+        <div class="md-setting-row">
+          <div class="md-setting-info">
+            <span class="md-setting-label">Sidebar Height</span>
+            <span class="md-setting-description">Default height constraint in pixels (min 200px).</span>
+          </div>
+          <div class="md-setting-control">
+            <input data-pref="sidebar.height" type="number" min="200" class="md-number-input">
+          </div>
+        </div>
+      </section>
+
+      <section class="md-card">
+        <h2 class="md-card-title">Behavior & Filtering</h2>
+
+        <div class="md-setting-row">
+          <div class="md-setting-info">
+            <span class="md-setting-label">Allow X-Frame-Options</span>
+            <span class="md-setting-description">Allows the page to bypass strict framing restrictions.</span>
+          </div>
+          <div class="md-setting-control">
+            <label class="md-switch">
+              <input data-pref="addon.xframe" type="checkbox">
+              <span class="md-switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="md-setting-row">
+          <div class="md-setting-info">
+            <span class="md-setting-label">Filter Ads</span>
+            <span class="md-setting-description">Attempts to block standard advertising elements within the
+              frame.</span>
+          </div>
+          <div class="md-setting-control">
+            <label class="md-switch">
+              <input data-pref="addon.ads" type="checkbox">
+              <span class="md-switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="md-setting-row">
+          <div class="md-setting-info">
+            <span class="md-setting-label">Hide Scrollbar</span>
+            <span class="md-setting-description">Removes frame scrollbars for a cleaner application window.</span>
+          </div>
+          <div class="md-setting-control">
+            <label class="md-switch">
+              <input data-pref="sidebar.scrollbar" type="checkbox">
+              <span class="md-switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="md-setting-row">
+          <div class="md-setting-info">
+            <span class="md-setting-label">Hide Top Toolbar</span>
+            <span class="md-setting-description">Removes the navigational header from the side panel.</span>
+          </div>
+          <div class="md-setting-control">
+            <label class="md-switch">
+              <input data-pref="sidebar.toolbar" type="checkbox">
+              <span class="md-switch-slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="text/javascript" src="options.js"></script>
+</body>
+
+</html>
