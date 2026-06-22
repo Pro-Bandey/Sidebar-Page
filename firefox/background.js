@@ -2,7 +2,9 @@
 
 const app = {};
 
-app.error = () => chrome.runtime.lastError;
+const borwserApi = typeof browser !== "undefined" ? browser : chrotme;
+
+app.error = () => borwserApi.runtime.lastError;
 
 app.storage = {
     local: {},
@@ -10,14 +12,14 @@ app.storage = {
         return this.local[id];
     },
     update(callback) {
-        chrome.storage.local.get(null, (e) => {
+        borwserApi.storage.local.get(null, (e) => {
             this.local = e || {};
             if (callback) callback("update");
         });
     },
     write(id, data, callback) {
         this.local[id] = data;
-        chrome.storage.local.set({ [id]: data }, (e) => {
+        borwserApi.storage.local.set({ [id]: data }, (e) => {
             if (callback) callback(e);
         });
     },
@@ -112,7 +114,7 @@ app.options = {
     },
     send(id, data) {
         if (id) {
-            chrome.runtime.sendMessage({ data, method: id, path: "background-to-options" }, app.error);
+            borwserApi.runtime.sendMessage({ data, method: id, path: "background-to-options" }, app.error);
         }
     },
     post(id, data) {
@@ -130,7 +132,7 @@ app.sidebar = {
     },
     send(id, data) {
         if (id) {
-            chrome.runtime.sendMessage({ data, method: id, path: "background-to-sidebar" }, app.error);
+            borwserApi.runtime.sendMessage({ data, method: id, path: "background-to-sidebar" }, app.error);
         }
     },
     post(id, data) {
@@ -139,8 +141,8 @@ app.sidebar = {
         }
     },
     behavior(e, callback) {
-        if (chrome.sidePanel) {
-            chrome.sidePanel.setPanelBehavior(e).catch((error) => {
+        if (borwserApi.sidePanel) {
+            borwserApi.sidePanel.setPanelBehavior(e).catch((error) => {
                 if (callback) callback(error);
             });
         }
@@ -157,17 +159,17 @@ app.button = {
         };
         const options = { path };
         if (tabId) options.tabId = tabId;
-        chrome.action.setIcon(options, app.error);
+        borwserApi.action.setIcon(options, app.error);
     }
 };
 
 app.tab = {
     options() {
-        chrome.runtime.openOptionsPage();
+        borwserApi.runtime.openOptionsPage();
     },
     query: {
         index(callback) {
-            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            borwserApi.tabs.query({ active: true, currentWindow: true }, (tabs) => {
                 if (tabs && tabs.length) {
                     callback(tabs[0].index);
                 } else {
@@ -184,7 +186,7 @@ app.tab = {
         if (index !== undefined && typeof index === "number") {
             properties.index = index + 1;
         }
-        chrome.tabs.create(properties, (tab) => {
+        borwserApi.tabs.create(properties, (tab) => {
             if (callback) callback(tab);
         });
     }
@@ -210,7 +212,7 @@ app.page = {
     },
     send(id, data, tabId, frameId) {
         if (id) {
-            chrome.tabs.query({}, (tabs) => {
+            borwserApi.tabs.query({}, (tabs) => {
                 if (tabs && tabs.length) {
                     const message = {
                         method: id,
@@ -225,13 +227,13 @@ app.page = {
                             if (tabId !== null && tabId !== undefined) {
                                 if (tabId === tab.id) {
                                     if (frameId !== null && frameId !== undefined) {
-                                        chrome.tabs.sendMessage(tab.id, message, { frameId }, app.error);
+                                        borwserApi.tabs.sendMessage(tab.id, message, { frameId }, app.error);
                                     } else {
-                                        chrome.tabs.sendMessage(tab.id, message, app.error);
+                                        borwserApi.tabs.sendMessage(tab.id, message, app.error);
                                     }
                                 }
                             } else {
-                                chrome.tabs.sendMessage(tab.id, message, app.error);
+                                borwserApi.tabs.sendMessage(tab.id, message, app.error);
                             }
                         }
                     });
@@ -245,9 +247,9 @@ app.netrequest = {
     display: {
         badge: {
             async text(enabled) {
-                if (chrome.declarativeNetRequest && chrome.declarativeNetRequest.setExtensionActionOptions) {
+                if (borwserApi.declarativeNetRequest && borwserApi.declarativeNetRequest.setExtensionActionOptions) {
                     const displayActionCountAsBadgeText = enabled !== undefined ? enabled : true;
-                    await chrome.declarativeNetRequest.setExtensionActionOptions({ displayActionCountAsBadgeText });
+                    await borwserApi.declarativeNetRequest.setExtensionActionOptions({ displayActionCountAsBadgeText });
                 }
             }
         }
@@ -257,8 +259,8 @@ app.netrequest = {
             update(options) {
                 return new Promise((resolve, reject) => {
                     app.storage.load(() => {
-                        if (chrome.declarativeNetRequest) {
-                            chrome.declarativeNetRequest.updateEnabledRulesets(options).then(resolve).catch(reject);
+                        if (borwserApi.declarativeNetRequest) {
+                            borwserApi.declarativeNetRequest.updateEnabledRulesets(options).then(resolve).catch(reject);
                         } else {
                             resolve();
                         }
@@ -270,11 +272,11 @@ app.netrequest = {
             get() {
                 return new Promise((resolve, reject) => {
                     app.storage.load(() => {
-                        if (chrome.declarativeNetRequest) {
+                        if (borwserApi.declarativeNetRequest) {
                             if (app.netrequest.rules.scope === "dynamic") {
-                                chrome.declarativeNetRequest.getDynamicRules().then(resolve).catch(reject);
+                                borwserApi.declarativeNetRequest.getDynamicRules().then(resolve).catch(reject);
                             } else {
-                                chrome.declarativeNetRequest.getSessionRules().then(resolve).catch(reject);
+                                borwserApi.declarativeNetRequest.getSessionRules().then(resolve).catch(reject);
                             }
                         } else {
                             resolve([]);
@@ -285,11 +287,11 @@ app.netrequest = {
             update(options) {
                 return new Promise((resolve, reject) => {
                     app.storage.load(() => {
-                        if (chrome.declarativeNetRequest) {
+                        if (borwserApi.declarativeNetRequest) {
                             if (app.netrequest.rules.scope === "dynamic") {
-                                chrome.declarativeNetRequest.updateDynamicRules(options).then(resolve).catch(reject);
+                                borwserApi.declarativeNetRequest.updateDynamicRules(options).then(resolve).catch(reject);
                             } else {
-                                chrome.declarativeNetRequest.updateSessionRules(options).then(resolve).catch(reject);
+                                borwserApi.declarativeNetRequest.updateSessionRules(options).then(resolve).catch(reject);
                             }
                         } else {
                             resolve();
@@ -358,13 +360,13 @@ app.netrequest = {
                 async scope(targetScope) {
                     let removeRuleIds = [];
                     if (targetScope === "dynamic") {
-                        const dynamicRules = await chrome.declarativeNetRequest.getDynamicRules();
+                        const dynamicRules = await borwserApi.declarativeNetRequest.getDynamicRules();
                         removeRuleIds = dynamicRules.map(e => e.id);
-                        await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds });
+                        await borwserApi.declarativeNetRequest.updateDynamicRules({ removeRuleIds });
                     } else if (targetScope === "session") {
-                        const sessionRules = await chrome.declarativeNetRequest.getSessionRules();
+                        const sessionRules = await borwserApi.declarativeNetRequest.getSessionRules();
                         removeRuleIds = sessionRules.map(e => e.id);
-                        await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds });
+                        await borwserApi.declarativeNetRequest.updateSessionRules({ removeRuleIds });
                     }
                     app.netrequest.rules.stack = app.netrequest.rules.stack.filter(e => !removeRuleIds.includes(e.id));
                 },
@@ -400,42 +402,42 @@ app.netrequest = {
     }
 };
 
-app.version = () => chrome.runtime.getManifest().version;
-app.homepage = () => chrome.runtime.getManifest().homepage_url;
+app.version = () => borwserApi.runtime.getManifest().version;
+app.homepage = () => borwserApi.runtime.getManifest().homepage_url;
 
 app.on = {
     management(callback) {
-        chrome.management.getSelf(callback);
+        borwserApi.management.getSelf(callback);
     },
     uninstalled(url) {
-        chrome.runtime.setUninstallURL(url, () => { });
+        borwserApi.runtime.setUninstallURL(url, () => { });
     },
     installed(callback) {
-        chrome.runtime.onInstalled.addListener((e) => {
+        borwserApi.runtime.onInstalled.addListener((e) => {
             app.storage.load(() => callback(e));
         });
     },
     startup(callback) {
-        chrome.runtime.onStartup.addListener((e) => {
+        borwserApi.runtime.onStartup.addListener((e) => {
             app.storage.load(() => callback(e));
         });
     },
     connect(callback) {
-        chrome.runtime.onConnect.addListener((e) => {
+        borwserApi.runtime.onConnect.addListener((e) => {
             app.storage.load(() => {
                 if (callback) callback(e);
             });
         });
     },
     storage(callback) {
-        chrome.storage.onChanged.addListener((changes, namespace) => {
+        borwserApi.storage.onChanged.addListener((changes, namespace) => {
             app.storage.update(() => {
                 if (callback) callback(changes, namespace);
             });
         });
     },
     message(callback) {
-        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        borwserApi.runtime.onMessage.addListener((request, sender, sendResponse) => {
             app.storage.load(() => {
                 callback(request, sender, sendResponse);
             });
@@ -626,10 +628,10 @@ const core = {
             }
             const id = parseInt(config.sidebar.mobile, 10);
             if (id < 5) {
-                let value = "Mozilla/5.0 (Linux; Android 17) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.7871.28 Mobile Safari/537.36";
+                let value = "Mozilla/5.0 (Linux; Android 17) AppleWebKit/537.36 (KHTML, like Gecko) borwserApi/150.0.7871.28 Mobile Safari/537.36";
                 if (id === 0) value = "Mozilla/5.0 (iPhone; CPU iPhone OS 26_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Mobile/15E148 Safari/604.1";
-                if (id === 1) value = "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.60 Mobile Safari/537.36";
-                if (id === 2) value = "Mozilla/5.0 (Windows Phone 10.0; Android 4.4; Microsoft; Lumia 950) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Mobile Safari/537.36 Edge/15.14977";
+                if (id === 1) value = "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) borwserApi/114.0.5735.60 Mobile Safari/537.36";
+                if (id === 2) value = "Mozilla/5.0 (Windows Phone 10.0; Android 4.4; Microsoft; Lumia 950) AppleWebKit/537.36 (KHTML, like Gecko) borwserApi/52.0.2743.116 Mobile Safari/537.36 Edge/15.14977";
                 if (id === 3) value = "Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)";
                 if (id === 4) value = "Mozilla/5.0 (Linux; U; Tizen 2.0; en-us) AppleWebKit/537.1 (KHTML, like Gecko) Mobile TizenBrowser/2.0";
 
