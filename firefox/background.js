@@ -631,7 +631,7 @@ const core = {
                 let value = "Mozilla/5.0 (Linux; Android 17) AppleWebKit/537.36 (KHTML, like Gecko) borwserApi/150.0.7871.28 Mobile Safari/537.36";
                 if (id === 0) value = "Mozilla/5.0 (iPhone; CPU iPhone OS 26_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Mobile/15E148 Safari/604.1";
                 if (id === 1) value = "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) borwserApi/114.0.5735.60 Mobile Safari/537.36";
-                if (id === 2) value = "Mozilla/5.0 (Windows Phone 10.0; Android 4.4; Microsoft; Lumia 950) AppleWebKit/537.36 (KHTML, like Gecko) borwserApi/52.0.2743.116 Mobile Safari/537.36 Edge/15.14977";
+                if (id === 2) value = "Mozilla/5.0 (Windows Phone 10.1; Android 4.4; Microsoft; Lumia 950) AppleWebKit/537.36 (KHTML, like Gecko) borwserApi/52.0.2743.116 Mobile Safari/537.36 Edge/15.14977";
                 if (id === 3) value = "Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)";
                 if (id === 4) value = "Mozilla/5.0 (Linux; U; Tizen 2.0; en-us) AppleWebKit/537.1 (KHTML, like Gecko) Mobile TizenBrowser/2.0";
 
